@@ -25,6 +25,7 @@
     top: 0; left: 0;
     width: 100%; height: 100%;
     z-index: -1;
+
   }
   
     h1 {
@@ -76,6 +77,10 @@ const canvas = document.getElementById('starfield');
 const ctx = canvas.getContext('2d');
 let stars = [];
 
+let shootingStar = null;
+let timer = 0;
+
+
 function resize() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
@@ -102,6 +107,42 @@ function drawStars(offsetX = 0, offsetY = 0) {
   });
 }
 
+
+
+function spawnShootingStar() {
+  shootingStar = {
+    x: Math.random() * canvas.width * 0.5,
+    y: Math.random() * canvas.height * 0.5,
+    vx: Math.random() * 6 + 3,   // x-speed
+    vy: Math.random() * 1.5 + 0.5, // y-speed
+    life: 0
+  };
+}
+
+function drawShootingStar() {
+  if (!shootingStar) return;
+
+  ctx.strokeStyle = 'white';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(shootingStar.x, shootingStar.y);
+  ctx.lineTo(shootingStar.x - 30, shootingStar.y - 10);
+  ctx.stroke();
+
+  shootingStar.x += shootingStar.vx;
+  shootingStar.y += shootingStar.vy;
+  shootingStar.life++;
+
+  if (shootingStar.life > 30) {
+    shootingStar = null;
+    timer = 0;
+  }
+}
+
+
+
+
+
 let parallaxX = 0;
 let parallaxY = 0;
 
@@ -114,10 +155,20 @@ document.addEventListener('mousemove', (e) => {
 
 function animate() {
   drawStars(parallaxX, parallaxY);
+  drawShootingStar();  // 🔁 draw shooting star if active
+
+  if (!shootingStar && timer > 150) {
+    if (Math.random() < 0.02) spawnShootingStar(); // ~2% chance per frame
+  }
+  timer++;
+
   requestAnimationFrame(animate);
 }
 
 animate();
+
+
+
 </script>  
 </body>
 </html>
