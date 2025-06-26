@@ -20,6 +20,14 @@
       text-align: center;
     }
 
+  #starfield {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: -1;
+    background: black;
+  }
+  
     h1 {
       font-size: 3em;
       margin-bottom: 0.5em;
@@ -63,7 +71,8 @@
     <a href="https://www.github.com/gsivanii" target="_blank" title="Github"><i class = "fab fa-github"></i></a>
     <a href="/resume.pdf" target="_blank" title="Resume"><i class="fas fa-file-alt"></i></a>
   </div>
-  
+
+<script>
 const canvas = document.getElementById('starfield');
 const ctx = canvas.getContext('2d');
 let stars = [];
@@ -110,6 +119,6 @@ function animate() {
 }
 
 animate();
-
+</script>  
 </body>
 </html>
