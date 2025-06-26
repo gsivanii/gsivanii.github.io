@@ -49,6 +49,7 @@
   </style>
 </head>
 <body>
+<canvas id="starfield"></canvas>
   <h1>Hi, I'm Gopika Sivani K S</h1>
   <p>
     I'm an aerospace engineering enthusiast, currently in my 4th year undergrad studies at the Indian Institute of Technology, Kanpur. I have deep interests in space systems, hypersonic flows,
@@ -62,5 +63,53 @@
     <a href="https://www.github.com/gsivanii" target="_blank" title="Github"><i class = "fab fa-github"></i></a>
     <a href="/resume.pdf" target="_blank" title="Resume"><i class="fas fa-file-alt"></i></a>
   </div>
+  
+const canvas = document.getElementById('starfield');
+const ctx = canvas.getContext('2d');
+let stars = [];
+
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+for (let i = 0; i < 200; i++) {
+  stars.push({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    r: Math.random() * 1.5 + 0.2,
+    d: Math.random() * 0.5 + 0.1,
+  });
+}
+
+function drawStars(offsetX = 0, offsetY = 0) {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = 'white';
+  stars.forEach(star => {
+    ctx.beginPath();
+    ctx.arc(star.x + offsetX, star.y + offsetY, star.r, 0, Math.PI * 2);
+    ctx.fill();
+  });
+}
+
+let parallaxX = 0;
+let parallaxY = 0;
+
+document.addEventListener('mousemove', (e) => {
+  const centerX = window.innerWidth / 2;
+  const centerY = window.innerHeight / 2;
+  parallaxX = (e.clientX - centerX) * 0.01;
+  parallaxY = (e.clientY - centerY) * 0.01;
+});
+
+function animate() {
+  drawStars(parallaxX, parallaxY);
+  requestAnimationFrame(animate);
+}
+
+animate();
+
 </body>
 </html>
